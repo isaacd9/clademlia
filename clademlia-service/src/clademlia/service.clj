@@ -6,8 +6,14 @@
   (:require [clojure.java.io :as io])
   (:gen-class))
 
+(def kValue 20)
+(def distance bit-xor)
+
 (def data
   (atom #{}))
+
+(def kbuckets
+  (atom []))
 
 (def ip
   (.getHostAddress
@@ -28,11 +34,15 @@
         fnid)
       )))
 
+(defn find-bucket
+  [node]
+  (let [dist (distance node nid)
+        log2 #(/ (Math/log %1) (Math/log 2))]
+    (int (log2 dist))))
+
 (defn parse-nid
   [nid]
   (BigInteger. nid 16))
-
-(def distance bit-xor)
 
 (defn updateNode
   [nodeId ip port]
